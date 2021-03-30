@@ -7,28 +7,14 @@ use Symfony\Component\Security\Core\Security;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\User;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Webkul\UVDesk\CoreFrameworkBundle\Form\UserProfile;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Webkul\UVDesk\CoreFrameworkBundle\Utils\TokenGenerator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Webkul\UVDesk\SupportCenterBundle\Entity\KnowledgebaseWebsite;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\Website as CoreWebsite;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Webkul\UVDesk\CoreFrameworkBundle\FileSystem\FileSystem;
-use Symfony\Component\Translation\TranslatorInterface;
 
-Class Customer extends AbstractController
+Class Customer extends Controller
 {
-    private $translator;
-    private $fileSystem;
-    private $passwordEncoder;
-
-    public function __construct(TranslatorInterface $translator, UserPasswordEncoderInterface $passwordEncoder, FileSystem $fileSystem)
-    {
-        $this->translator = $translator;
-        $this->fileSystem = $fileSystem;
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
     protected function redirectUserToLogin()
     {
         $authChecker = $this->container->get('security.authorization_checker');
@@ -40,10 +26,10 @@ Class Customer extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $website = $entityManager->getRepository(CoreWebsite::class)->findOneByCode('knowledgebase');
-  
+
         if (!empty($website)) {
             $knowledgebaseWebsite = $entityManager->getRepository(KnowledgebaseWebsite::class)->findOneBy(['website' => $website->getId(), 'status' => 1]);
-            
+
             if (!empty($knowledgebaseWebsite) && true == $knowledgebaseWebsite->getIsActive()) {
                 return true;
             }
@@ -86,7 +72,7 @@ Class Customer extends AbstractController
 
         /** check disabled customer login **/
         if($this->isLoginDisabled()) {
-            $this->addFlash('warning', $this->translator->trans('Warning ! Customer Login disabled by admin.') );
+            $this->addFlash('warning', $this->get('translator')->trans('Warning ! Customer Login disabled by admin.') );
             return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
         }
 
@@ -101,10 +87,10 @@ Class Customer extends AbstractController
             'error'         => $error,
             'breadcrumbs' => [
                 [
-                    'label' => $this->translator->trans('Support Center'),
+                    'label' => $this->get('translator')->trans('Support Center'),
                     'url' => $this->generateUrl('helpdesk_knowledgebase')
                 ], [
-                    'label' => $this->translator->trans('Sign In'),
+                    'label' => $this->get('translator')->trans('Sign In'),
                     'url' => '#'
                 ]
             ]
@@ -128,7 +114,7 @@ Class Customer extends AbstractController
             $validMimeType = ['image/jpeg', 'image/png', 'image/jpg'];
             if (isset($dataFiles['profileImage'])) {
                 if (!in_array($dataFiles['profileImage']->getMimeType(), $validMimeType)) {
-                    $this->addFlash('warning', $this->translator->trans('Error ! Profile image is not valid, please upload a valid format'));
+                    $this->addFlash('warning', $this->get('translator')->trans('Error ! Profile image is not valid, please upload a valid format'));
                     return $this->redirect($this->generateUrl('helpdesk_customer_account'));
                 }
             }
@@ -150,7 +136,7 @@ Class Customer extends AbstractController
 
                 if ($form->isValid()) {
                     if ($data != null && (!empty($data['password']['first']))) {
-                        $encodedPassword = $this->passwordEncoder->encodePassword($user, $data['password']['first']);
+                        $encodedPassword = $this->container->get('security.password_encoder')->encodePassword($user, $data['password']['first']);
 
                         if (!empty($encodedPassword) ) {
                             $user->setPassword($encodedPassword);
@@ -163,15 +149,14 @@ Class Customer extends AbstractController
                     $user->setLastName($data['lastName']);
                     $user->setEmail($data['email']);
                     $user->setTimeZone($data['timezone']);
-                    $user->setTimeFormat($data['timeformat']);
-                    
+
                     $em->persist($user);
                     $em->flush();
 
                     $userInstance = $em->getRepository('UVDeskCoreFrameworkBundle:UserInstance')->findOneBy(array('user' => $user->getId()));
 
                     if (isset($dataFiles['profileImage'])) {
-                        $assetDetails = $this->fileSystem->getUploadManager()->uploadFile($dataFiles['profileImage'], 'profile');
+                        $assetDetails = $this->container->get('uvdesk.core.file_system.service')->getUploadManager()->uploadFile($dataFiles['profileImage'], 'profile');
                         $userInstance->setProfileImagePath($assetDetails['path']);
                     }
 
@@ -179,7 +164,7 @@ Class Customer extends AbstractController
                     $em->persist($userInstance);
                     $em->flush();
 
-                    $this->addFlash('success', $this->translator->trans('Success ! Profile updated successfully.'));
+                    $this->addFlash('success', $this->get('translator')->trans('Success ! Profile updated successfully.'));
                     return $this->redirect($this->generateUrl('helpdesk_customer_account'));
                 } else {
                     $errors = $form->getErrors();
@@ -188,7 +173,7 @@ Class Customer extends AbstractController
                     $errors = $this->getFormErrors($form);
                 }
             } else {
-                $this->addFlash('warning', $this->translator->trans('Error ! User with same email is already exist.'));
+                $this->addFlash('warning', $this->get('translator')->trans('Error ! User with same email is already exist.'));
                 return $this->redirect($this->generateUrl('helpdesk_customer_account'));
             }
         }
@@ -213,7 +198,7 @@ Class Customer extends AbstractController
             'search' => $searchQuery,
             'articles' => $articleCollection,
             'breadcrumbs' => [
-                ['label' => $this->translator->trans('Support Center'), 'url' => $this->generateUrl('helpdesk_knowledgebase')],
+                ['label' => $this->get('translator')->trans('Support Center'), 'url' => $this->generateUrl('helpdesk_knowledgebase')],
                 ['label' => $searchQuery, 'url' => '#'],
             ],
         ]);
