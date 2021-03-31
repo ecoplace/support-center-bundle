@@ -71,7 +71,7 @@ class Website extends Controller
         ];
 
         $newResult = [];
-       
+
         foreach ($twigResponse['solutions'] as $key => $result) {
             $newResult[] = [
                 'id' => $result->getId(),
@@ -96,7 +96,7 @@ class Website extends Controller
             ];
 
             $article =  $articleRepository->getAllArticles(new ParameterBag($parameterBag), $this->container, 'a.id, a.name, a.slug, a.stared');
-             
+
             return [
                 'id' => $category['id'],
                 'name' => $category['name'],
@@ -114,7 +114,7 @@ class Website extends Controller
 
         $solutionRepository = $this->getDoctrine()->getRepository('UVDeskSupportCenterBundle:Solutions');
         $categoryCollection = $solutionRepository->getAllCategories(10, 4);
-        
+
         return $this->render('@UVDeskSupportCenter/Knowledgebase/categoryListing.html.twig', [
             'categories' => $categoryCollection,
             'categoryCount' => count($categoryCollection),
@@ -124,15 +124,15 @@ class Website extends Controller
     public function viewFolder(Request $request)
     {
         $this->isKnowledgebaseActive();
-        
+
         if(!$request->attributes->get('solution'))
             return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
 
         $filterArray = ['id' => $request->attributes->get('solution')];
 
         $solution = $this->getDoctrine()
-                    ->getRepository('UVDeskSupportCenterBundle:Solutions')
-                    ->findOneBy($filterArray);
+            ->getRepository('UVDeskSupportCenterBundle:Solutions')
+            ->findOneBy($filterArray);
 
         if(!$solution)
             $this->noResultFound();
@@ -179,8 +179,8 @@ class Website extends Controller
         $filterArray = ['id' => $request->attributes->get('solution')];
 
         $solution = $this->getDoctrine()
-                    ->getRepository('UVDeskSupportCenterBundle:Solutions')
-                    ->findOneBy($filterArray);
+            ->getRepository('UVDeskSupportCenterBundle:Solutions')
+            ->findOneBy($filterArray);
 
         if(!$solution)
             $this->noResultFound();
@@ -224,14 +224,14 @@ class Website extends Controller
             return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
 
         $filterArray = array(
-                            'id' => $request->attributes->get('category'),
-                            'status' => 1,
-                        );
-       
+            'id' => $request->attributes->get('category'),
+            'status' => 1,
+        );
+
         $category = $this->getDoctrine()
-                    ->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
-                    ->findOneBy($filterArray);
-    
+            ->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
+            ->findOneBy($filterArray);
+
         if(!$category)
             $this->noResultFound();
 
@@ -239,7 +239,7 @@ class Website extends Controller
             [ 'label' => $this->translator->trans('Support Center'),'url' => $this->generateUrl('helpdesk_knowledgebase') ],
             [ 'label' => $category->getName(),'url' => '#' ],
         ];
-        
+
         $parameterBag = [
             'categoryId' => $category->getId(),
             'status' => 1,
@@ -250,21 +250,21 @@ class Website extends Controller
         $category_data=  array(
             'category' => $category,
             'articlesCount' => $this->getDoctrine()
-                            ->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
-                            ->getArticlesCountByCategory($category->getId(), [1]),
+                ->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
+                ->getArticlesCountByCategory($category->getId(), [1]),
             'articles' => $this->getDoctrine()
-                        ->getRepository('UVDeskSupportCenterBundle:Article')
-                        ->getAllArticles(new ParameterBag($parameterBag), $this->container, 'a.id, a.name, a.slug, a.stared'),
+                ->getRepository('UVDeskSupportCenterBundle:Article')
+                ->getAllArticles(new ParameterBag($parameterBag), $this->container, 'a.id, a.name, a.slug, a.stared'),
             'breadcrumbs' => $breadcrumbs
         );
 
         return $this->render('@UVDeskSupportCenter/Knowledgebase/category.html.twig',$category_data);
     }
-   
+
     public function viewArticle(Request $request)
     {
         $this->isKnowledgebaseActive();
-       
+
         if (!$request->attributes->get('article') && !$request->attributes->get('slug')) {
             return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
         }
@@ -278,23 +278,23 @@ class Website extends Controller
         } else {
             $article = $articleRepository->findOneBy(['status' => 1,'slug' => $request->attributes->get('slug')]);
         }
-       
+
         if (empty($article)) {
             $this->noResultFound();
         }
         $article->setViewed((int) $article->getViewed() + 1);
-        
+
         // Log article view
         $articleViewLog = new ArticleViewLog();
         $articleViewLog->setUser(($user != null && $user != 'anon.') ? $user : null);
-        
+
         $articleViewLog->setArticle($article);
         $articleViewLog->setViewedAt(new \DateTime('now'));
 
         $entityManager->persist($article);
         $entityManager->persist($articleViewLog);
         $entityManager->flush();
-        
+
         // Get article feedbacks
         $feedbacks = ['enabled' => false, 'submitted' => false, 'article' => $articleRepository->getArticleFeedbacks($article)];
 
@@ -317,7 +317,8 @@ class Website extends Controller
             'articleTags' => $articleRepository->getTagsByArticle($article->getId()),
             'articleAuthor' => $articleRepository->getArticleAuthorDetails($article->getId()),
             'relatedArticles' => $articleRepository->getAllRelatedyByArticle(['locale' => $request->getLocale(), 'articleId' => $article->getId()], [1]),
-            'popArticles'  => $articleRepository->getPopularTranslatedArticles($request->getLocale())
+            'popArticles'  => $articleRepository->getPopularTranslatedArticles($request->getLocale()),
+            'feedbacks' => $feedbacks
         ];
 
         return $this->render('@UVDeskSupportCenter/Knowledgebase/article.html.twig',$article_details);
@@ -367,59 +368,61 @@ class Website extends Controller
         $this->isKnowledgebaseActive();
 
         // @TODO: Refactor
-            
-        // if ($request->getMethod() != 'POST') {
-        //     return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
-        // }
 
-        // $company = $this->getCompany();
-        // $user = $this->userService->getCurrentUser();
-        $response = ['code' => 404, 'content' => ['alertClass' => 'danger', 'alertMessage' => 'An unexpected error occurred. Please try again later.']];
+        if ($request->getMethod() != 'POST') {
+            return $this->redirect($this->generateUrl('helpdesk_knowledgebase'));
+        }
 
-        // if (!empty($user) && $user != 'anon.') {
-        //     $entityManager = $this->getDoctrine()->getEntityManager();
-        //     $article = $entityManager->getRepository('WebkulSupportCenterBundle:Article')->findOneBy(['id' => $articleId, 'companyId' => $company->getId()]);
+//         $company = $this->getCompany();
+        $user = $this->userService->getCurrentUser();
+//        $response = ['code' => 404, 'content' => ['alertClass' => 'danger', 'alertMessage' => 'An unexpected error occurred. Please try again later.']];
 
-        //     if (!empty($article)) {
-        //         $providedFeedback = $request->request->get('feedback');
+        if (!empty($user) && $user != 'anon.') {
+            $entityManager = $this->getDoctrine()->getEntityManager();
 
-        //         if (!empty($providedFeedback) && in_array(strtolower($providedFeedback), ['positive', 'neagtive'])) {
-        //             $isArticleHelpful = ('positive' == strtolower($providedFeedback)) ? true : false;
-        //             $articleFeedback = $entityManager->getRepository('WebkulSupportCenterBundle:ArticleFeedback')->findOneBy(['article' => $article, 'ratedCustomer' => $user]);
+            $articleRepository = $entityManager->getRepository('UVDeskSupportCenterBundle:Article');
+            $article = $articleRepository->findOneBy(['status' => 1, 'id' => $articleId]);
 
-        //             $response = ['code' => 200, 'content' => ['alertClass' => 'success', 'alertMessage' => 'Feedback saved successfully.']];
+            if (!empty($article)) {
+                $providedFeedback = $request->request->get('feedback');
 
-        //             if (empty($articleFeedback)) {
-        //                 $articleFeedback = new \Webkul\SupportCenterBundle\Entity\ArticleFeedback();
+                if (!empty($providedFeedback) && in_array(strtolower($providedFeedback), ['positive', 'neagtive'])) {
+                    $isArticleHelpful = ('positive' == strtolower($providedFeedback)) ? true : false;
+                    $articleFeedback = $entityManager->getRepository('UVDeskSupportCenterBundle:ArticleFeedback')->findOneBy(['article' => $article, 'ratedCustomer' => $user]);
 
-        //                 // $articleBadge->setDescription('');
-        //                 $articleFeedback->setIsHelpful($isArticleHelpful);
-        //                 $articleFeedback->setArticle($article);
-        //                 $articleFeedback->setRatedCustomer($user);
-        //                 $articleFeedback->setCreatedAt(new \DateTime('now'));
-        //             } else {
-        //                 $articleFeedback->setIsHelpful($isArticleHelpful);
-        //                 $response['content']['alertMessage'] = 'Feedback updated successfully.';
-        //             }
+                    $response = ['code' => 200, 'content' => ['alertClass' => 'success', 'alertMessage' => 'Feedback saved successfully.']];
 
-        //             $entityManager->persist($articleFeedback);
-        //             $entityManager->flush();
-        //         } else {
-        //             $response['content']['alertMessage'] = 'Invalid feedback provided.';
-        //         }
-        //     } else {
-        //         $response['content']['alertMessage'] = 'Article not found.';
-        //     }
-        // } else {
-        //     $response['content']['alertMessage'] = 'You need to login to your account before can perform this action.';
-        // }
+                    if (empty($articleFeedback)) {
+                        $articleFeedback = new \Webkul\UVDesk\SupportCenterBundle\Entity\ArticleFeedback();
+
+                        // $articleBadge->setDescription('');
+                        $articleFeedback->setIsHelpful($isArticleHelpful);
+                        $articleFeedback->setArticle($article);
+                        $articleFeedback->setRatedCustomer($user);
+                        $articleFeedback->setCreatedAt(new \DateTime('now'));
+                    } else {
+                        $articleFeedback->setIsHelpful($isArticleHelpful);
+                        $response['content']['alertMessage'] = 'Feedback updated successfully.';
+                    }
+
+                    $entityManager->persist($articleFeedback);
+                    $entityManager->flush();
+                } else {
+                    $response['content']['alertMessage'] = 'Invalid feedback provided.';
+                }
+            } else {
+                $response['content']['alertMessage'] = 'Article not found.';
+            }
+        } else {
+            $response['content']['alertMessage'] = 'You need to login to your account before can perform this action.';
+        }
 
         return new Response(json_encode($response['content']), $response['code'], ['Content-Type: application/json']);
     }
 
     /**
      * If customer is playing with url and no result is found then what will happen
-     * @return 
+     * @return
      */
     protected function noResultFound()
     {
