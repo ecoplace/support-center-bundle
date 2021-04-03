@@ -7,12 +7,12 @@ helpdesk_knowledgebase_exception:
     defaults: { _controller: WebkulDefaultBundle:Default:exceptionDefault }
 
 helpdesk_knowledgebase_folder:
-    path:     /folder/{solution}
+    path:     /knowledgebase/{solution}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewFolder
     defaults: { solution: 0 }
 
 helpdesk_knowledgebase_folder_article_collection:
-    path:     /folder/{solution}/articles
+    path:     /knowledgebase/{solution}/articles
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewFolderArticle
     defaults: { solution: 0 }
 
@@ -31,7 +31,7 @@ helpdesk_knowledgebase_read_article:
     defaults: { article: 0 }
 
 helpdesk_knowledgebase_read_slug_article:
-    path:     /blog/{slug}
+    path:     /article/{slug}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewArticle
     defaults: { slug: '' }
 
