@@ -25,15 +25,15 @@ helpdesk_knowledgebase_category:
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewCategory
     defaults: { category: 0 }
 
-helpdesk_knowledgebase_read_article:
-    path:     /article/{article}
-    controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewArticle
-    defaults: { article: 0 }
-
 helpdesk_knowledgebase_read_slug_article:
     path:     /article/{slug}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewArticle
     defaults: { slug: '' }
+
+helpdesk_knowledgebase_read_article:
+    path: /articles/{article}
+    controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewArticle
+    defaults: { article: 0 }
 
 helpdesk_knowledgebase_rate_article:
     path:     /rating/{articleId}
