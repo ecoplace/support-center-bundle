@@ -71,6 +71,36 @@
         {% endif %}
 
         {% block templateCSS %}{% endblock %}
+
+    <?php
+    $graph = new \Spatie\SchemaOrg\Graph();
+        $graph->organization()
+        ->name('charityBay')
+        ->founders(\Spatie\SchemaOrg\Schema::person()->name('Haidar Al-fallouji'))
+        ->sameAs(['https://www.charitybay.org','https://www.charitybay.net','https://www.charitybay.org.au','https://www.charitybay.net.au','https://www.donateitems.net','https://www.facebook.com/charityBayAU','https://twitter.com/charitybayAU','https://www.instagram.com/charitybayau','https://www.linkedin.com/company/charitybay','https://www.youtube.com/channel/UCUJAdJbWOSOSa0z7D-2z4VQ','https://apps.apple.com/au/app/charitybay-donate-buy-smile/id1479319627','https://abr.business.gov.au/ABN/View?id=60636169698','https://play.google.com/store/apps/details?id=com.charitybay'])
+        ->legalName('CHARITYBAY PTY LTD')
+        ->slogan('The new era of giving back')
+        ->address(\Spatie\SchemaOrg\Schema::postalAddress()->streetAddress('109 Manningham Street')->addressLocality('Parkville')->addressRegion('Victoria')->postalCode(3052)->addressCountry('AU'))
+        ->description('')
+        ->taxID(60636169698)
+        ->logo(websiteDetails.logo)
+        ->url(canonical)
+        ->email('info@charitybay.org')
+        ->duns(746822318)
+        ->potentialAction(
+        \Spatie\SchemaOrg\Schema::searchAction()
+        ->target((new Spatie\SchemaOrg\EntryPoint)->urlTemplate('https://www.charitybay.org/listings?q={search_term_string}'))
+        ->setProperty('query-input',['type'=>'PropertyValueSpecification','valueRequired'=>true,'valueName'=>'search_term_string']))
+        ->foundingDate(new DateTime('2019-09-14 00:00:00'))
+        ->contactPoint(Spatie\SchemaOrg\Schema::contactPoint()->areaServed('Worldwide')->contactType('customer support')->email('info@charitybay.org'));
+
+        $graph->webSite()->url(canonical)->potentialAction(
+        \Spatie\SchemaOrg\Schema::searchAction()
+        ->target((new Spatie\SchemaOrg\EntryPoint)->urlTemplate('https://www.charitybay.org/listings?q={search_term_string}'))
+        ->setProperty('query-input',['type'=>'PropertyValueSpecification','valueRequired'=>true,'valueName'=>'search_term_string']));
+        
+        echo $graph;
+    ?>
     </head>
 
     {% set bodyClass = '' %}
