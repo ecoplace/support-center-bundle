@@ -16,6 +16,7 @@
         {% set websiteDetails = user_service.getWebsiteDetails('knowledgebase') %}
         {% set websiteConfiguration = user_service.getWebsiteConfiguration('knowledgebase') %}
         {% set themeTemplate = user_service.getWebsiteView() %}
+        {% set siteSchema = user_service.getWebsiteSchema() %}
 
         {% set canonical = app.request.server.get('REQUEST_SCHEME')~'://'~app.request.server.get('HTTP_HOST')~app.request.server.get('PATH_INFO') %}
         <link rel="canonical" href="{% block canonical %}{{canonical}}{% endblock %}">
