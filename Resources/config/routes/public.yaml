@@ -1,6 +1,8 @@
 helpdesk_knowledgebase:
     path:     /
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::home
+    options:
+        sitemap: true
 
 helpdesk_knowledgebase_exception:
     path:     /exception
@@ -10,6 +12,11 @@ helpdesk_knowledgebase_folder:
     path:     /knowledgebase/{solution}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewFolder
     defaults: { solution: 0 }
+    options:
+        sitemap:
+            priority: 0.7
+            changefreq: weekly
+            section: topics
 
 helpdesk_knowledgebase_folder_article_collection:
     path:     /knowledgebase/{solution}/articles
@@ -24,11 +31,21 @@ helpdesk_knowledgebase_category:
     path:     /category/{category}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewCategory
     defaults: { category: 0 }
+    options:
+        sitemap:
+            priority: 0.7
+            changefreq: weekly
+            section: categories
 
 helpdesk_knowledgebase_read_slug_article:
     path:     /article/{slug}
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Website::viewArticle
     defaults: { slug: '' }
+    options:
+        sitemap:
+            priority: 0.7
+            changefreq: daily
+            section: articles
 
 helpdesk_knowledgebase_read_article:
     path: /articles/{article}

@@ -57,6 +57,8 @@ helpdesk_customer_update_ticket_collaborators_xhr:
 helpdesk_customer_create_ticket:
     path:     /create-ticket/
     controller: Webkul\UVDesk\SupportCenterBundle\Controller\Ticket::ticketAdd
+    options:
+        sitemap: true
     
 helpdesk_customer_create_ticket_success:
     path:     /ticket/success/{email}/{flag}
