@@ -21,11 +21,8 @@
     {% set canonical = app.request.server.get('REQUEST_SCHEME')~'://'~app.request.server.get('HTTP_HOST')~app.request.server.get('PATH_INFO') %}
     <link rel="canonical" href="{% block canonical %}{{canonical}}{% endblock %}">
 
-    {% if websiteDetails and (websiteDetails.favicon) %}
-        <link rel="icon" sizes="16x16" href="{{websiteDetails.favicon ? websiteDetails.favicon : null}}" />
-    {% else %}
-        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-    {% endif %}
+    <meta name="application-name" content="charityBay Support">
+    <link rel="icon" sizes="512x512" href="{{ asset('assets/app_icon.png') }}">
 
     {% if websiteDetails %}
         <title>{% block title %} {{ websiteDetails.name ? websiteDetails.name : 'Knowledge Base'|trans }} {% endblock %}</title>
