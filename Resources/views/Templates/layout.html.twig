@@ -42,10 +42,8 @@
         <meta property="og:url" content="{% block ogcanonical %}{{canonical}}{% endblock %}" />
         <meta property="og:site_name" content="{{ websiteDetails.name ? websiteDetails.name : 'Knowledge Base'|trans }}" />
         <meta property="og:description" content="{{ block('metaDescription') }}" />
-        {% if websiteDetails.logo %}
-            <meta property="og:image" content="{{ websiteDetails.logo }}" />
-            <meta property="twitter:image" content="{{ websiteDetails.logo }}" />
-        {% endif %}
+        <meta property="og:image" content="{{ assets_default_app_icon_path }}" />
+        <meta property="twitter:image" content="{{ assets_default_app_icon_path }}" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="{% block twtitle %} {{ websiteDetails.name ? websiteDetails.name : 'Knowledge Base'|trans }}{% endblock %}" />
         <meta name="twitter:description" content="{{ block('metaDescription') }}" />
