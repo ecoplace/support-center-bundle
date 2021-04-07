@@ -148,6 +148,11 @@
 {% endblock %}
 
 {% block footer %}
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{{ asset('serviceworker.js') }}");
+        }
+    </script>
     {% include "@UVDeskSupportCenter/Templates/footer.html.twig" %}
 
     {% include "@UVDeskSupportCenter/Templates/pagination.html.twig" %}
