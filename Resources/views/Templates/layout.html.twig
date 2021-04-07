@@ -53,6 +53,7 @@
         <meta name="twitter:title" content="{% block twtitle %} {{ websiteDetails.name ? websiteDetails.name : 'Knowledge Base'|trans }}{% endblock %}" />
         <meta name="twitter:description" content="{{ block('metaDescription') }}" />
     {% endif %}
+    {{ include('@DisjfaPwa/meta.html.twig') }}
 
     {% if websiteConfiguration %}
         {% block head %}
