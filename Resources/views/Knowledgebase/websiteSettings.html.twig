@@ -1,8 +1,4 @@
-{% if websiteDetails.favicon %}
-    <link rel="icon" sizes="16x16" href="{{ websiteDetails.favicon }}" />
-{% else %}
-	<link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-{% endif %}
+<link rel="icon" sizes="512x512" href="{{ asset('assets/app_icon.png') }}">
 
 <style>
 	{% if websiteConfiguration.pageBackgroundColor %}
