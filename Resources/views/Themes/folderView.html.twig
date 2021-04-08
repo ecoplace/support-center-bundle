@@ -1,24 +1,47 @@
-<div class="uv-kb-section">
-	<div class="uv-kb-section-head">
+<div class="uv-kb-section" style="border: none;">
+	<div class="uv-kb-section-head" style="transform: translateY(-100px);background-color: white;padding: 3rem;box-shadow: 0 10px 10px -4px rgb(0 0 0 / 20%);border-radius: 8px;display: none;">
 		<h1 class="uv-text-center">{{ "Browse via Folders"|trans}}</h1>
-		<p class="uv-text-center uv-fixed-width">{{ "Looking for something that is queried generally? Choose a relevant folder from below to explore possible solutions"|trans}}</p>
+		<p class="uv-text-center uv-fixed-width" style="
+    font-size: 16px;
+    color: #888;
+">{{ "Looking for something that is queried generally? Choose a relevant folder from below to explore possible solutions"|trans}}</p>
 	</div>
-	<div class="uv-kb-section-layout uv-kb-layout-folder">
-    	{% for folder in solutions.results %}
+	<div class="uv-kb-section-layout uv-kb-layout-folder" style="margin: 0;margin-bottom: 3rem;">
+		<style>
+			.box {
+				padding: 15px 0;
+				display: inline-grid!important;
+				width: 33vw !important;
+				min-width: 300px!important;
+				border: none!important;
+				-webkit-transition: background-image 15s;
+				transition: background-image 15s;
+				-webkit-box-shadow: 0 10px 20px 0 rgb(0 0 0 / 8%);
+				box-shadow: 0 10px 20px 0 rgb(0 0 0 / 8%);-webkit-transition-duration: .3s;transition-duration: .3s;-webkit-transition-property: all;transition-property: all;border-radius: 10px;
+			}
+			.box:hover {
+				box-shadow: 0 0 11px rgba(33,33,33,.2);
+			}
+		</style>
+		{% for folder in solutions.results %}
 			<!--Folder-->
-			<div class="uv-kb-folder">
-				<div class="uv-kb-folder-lt">
-					{% if folder.solutionImage %}
-						<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('') }}{{ folder.solutionImage }}">
-					{% endif %}
+			<a href="{{ path('helpdesk_knowledgebase_folder', {'solution': folder.id}) }}">
+				<div class="uv-kb-folder box">
+					<div class="uv-kb-folder-lt" style="margin: auto;">
+						{% if folder.solutionImage %}
+							<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('') }}{{ folder.solutionImage }}" style="
+    /* height: 100px; */
+    /* width: 100px; */
+">
+						{% endif %}
+					</div>
+					<div class="uv-kb-folder-rt" style="margin: 0;width: 100%;">
+						<h1 class="uv-text-center uv-margin-top-10">{{folder.name}}</h1>
+						<p style="text-align: center;margin-top: 7px;font-size: 16px;color: #888;overflow: unset;text-overflow: unset; white-space: unset;"><span>{{folder.description}}</span></p>
+					</div>
 				</div>
-				<div class="uv-kb-folder-rt">
-					<p><span>{{folder.name}}</span></p>
-					<p><a href="{{ path('helpdesk_knowledgebase_folder', {'solution': folder.id}) }}">{{folder.categoriesCount}} {{"Categories"|trans}}</a></p>
-					<p><a href="{{ path('helpdesk_knowledgebase_folder_article_collection', {'solution': folder.id}) }}">{{folder.articleCount}} {{"Articles"|trans}}</a></p>
-				</div>
-			</div>
+			</a>
 			<!--//Folder-->
-    	{% endfor %}
+		{% endfor %}
 	</div>
 </div>

@@ -130,8 +130,16 @@
     <div class="uv-body">
         <div class="uv-container">
             {% block body %}
-            <div class="uv-cta-wrapper">
-                <div class="uv-cta-lt">
+            <div class="uv-cta-wrapper" style="
+    background-color: #FFF;
+    border: 1px solid #ddd;
+    padding: 2rem 4rem;
+    border-radius: .5rem;
+    box-shadow: 0 5px 10px -10px;
+">
+                <div class="uv-cta-lt" style="
+    margin-right: 1.5rem;
+">
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -141,8 +149,13 @@
                     </svg>
                 </div>
                 <div class="uv-cta-rt">
-                    <h2>{{"Unable to find an answer?"|trans}}</h2>
-                    <p>{{"Looking for anything specific article which resides in general queries? Just browse the various relevant folders and categories and then you will find the desired article."|trans}}
+                    <h2 style="
+    color: #555;
+">{{"Unable to find an answer?"|trans}}</h2>
+                    <p class="text text-muted" style="
+    color: #666;
+    margin-bottom: 1rem;
+">{{"Looking for anything specific article which resides in general queries? Just browse the various relevant folders and categories and then you will find the desired article."|trans}}
                     </p>
                     {% if websiteConfiguration is defined and websiteConfiguration.ticketCreateOption is defined %}
                         <a href="{{ path('helpdesk_customer_create_ticket') }}" class="uv-btn uv-margin-top-15">{{'Contact Us'|trans}}</a>
