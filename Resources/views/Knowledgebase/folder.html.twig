@@ -5,7 +5,7 @@
 {% block metaDescription %}{{folder.description}}{% endblock %}
 {% block metaKeywords %}{{ uvdesk_service.createConentToKeywords(folder.description)}}{% endblock %}
 
-{% block body %} 
+{% block body %}
 	<div class="uv-paper-article">
 		<div class="uv-paper-section">
 			<section>
@@ -13,13 +13,69 @@
 				<p>{{folder.description}}</p>
 			</section>
 			<section class="uv-margin-top-30">
-				<h4>{{'CATEGORIES'|trans}}</h4>
+				<style>
+					li {
+						display: list-item;
+						text-align: -webkit-match-parent;
+					}
+					ul {
+						list-style: none;
+						margin: 0;
+						padding: 0;
+					}
+					.section-tree {
+						display: flex;
+						flex-direction: column;
+						flex-wrap: wrap;
+						justify-content: space-between;
+					}
+
+					.section-tree .section {
+						flex: initial;
+					}
+					.section {
+						margin-bottom: 0px!important;
+					}
+					.list-item {
+						border-bottom: 1px solid #ddd;
+						font-size: 16px;
+						padding: 15px 0;
+					}
+					@media (min-width: 768px) {
+						.section-tree {
+							flex-direction: row;
+						}
+					}
+					@media (min-width: 768px) {
+						.section-tree .section {
+							flex: 0 0 45%;
+						}
+					}
+					@media (min-width: 768px) {
+						.section {
+							margin-bottom: 60px;
+						}
+
+						.section {
+							margin-bottom: 40px;
+						}
+					}
+				</style>
 				{% if categories %}
-					<ul>
+					<section class="section-tree">
 						{% for category in categories %}
-							<li><a href="{{path('helpdesk_knowledgebase_category', {'category': category.id})}}">{{category.name}}</a></li>
+							<section class="section">
+								<a style="color: unset !important;" href="{{path('helpdesk_knowledgebase_category', {'category': category.id})}}"><h2>{{category.name}}</h2></a>
+								{% if category.articles %}
+									<ul>
+										{% for article in category.articles %}
+											<li class="list-item"><a style="color: #333333!important;" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': article.slug})}}">{{article.name}}</a></li>
+										{% endfor %}
+									</ul>
+								{% endif %}
+							</section>
 						{% endfor %}
-					</ul>
+					</section>
 				{% else %}
 					<p>{{"No Category Found!"|trans}}</p>
 				{% endif %}
