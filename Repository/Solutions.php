@@ -157,6 +157,8 @@ class Solutions extends \Doctrine\ORM\EntityRepository
             foreach($categories as $key => $category){
                 $categories[$key]['articleCount'] = $this->getEntityManager()->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
                                                     ->getArticlesCountByCategory($category['id']);
+                $categories[$key]['articles'] = $this->getEntityManager()->getRepository('UVDeskSupportCenterBundle:SolutionCategory')
+                    ->getArticlesByCategory($category['id']);
             }
         }
         
