@@ -69,7 +69,7 @@
 								{% if category.articles %}
 									<ul>
 										{% for article in category.articles %}
-											<li class="list-item"><a style="color: #333333!important;" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': article.slug})}}">{{article.name}}</a></li>
+											<li class="list-item">{% if article.stared %}<span class="uv-icon-star uv-pre"></span>{% endif %} <a style="color: #333333!important;" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': article.slug})}}">{{article.name}}</a></li>
 										{% endfor %}
 									</ul>
 								{% endif %}

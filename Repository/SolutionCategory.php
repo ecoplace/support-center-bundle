@@ -199,7 +199,7 @@ class SolutionCategory extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('sc');
 
-        $results = $queryBuilder->select('a.id, a.name, a.slug')
+        $results = $queryBuilder->select('a.id, a.name, a.slug', 'a.stared')
                  ->leftJoin('Webkul\UVDesk\SupportCenterBundle\Entity\ArticleCategory','ac','WITH', 'ac.categoryId = sc.id')
                  ->leftJoin('Webkul\UVDesk\SupportCenterBundle\Entity\Article','a','WITH', 'ac.id = a.id')
                  ->andwhere('ac.categoryId = :categoryId')
