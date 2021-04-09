@@ -18,6 +18,7 @@
 		.active{
 			width: 100%;
 			white-space: pre-wrap!important;
+			text-align: left !important;
 		}
 		.uv-paper-article{
 			display: grid;
@@ -31,10 +32,12 @@
 		}
 		.uv-paper-article .uv-paper-aside aside a:link, .uv-paper-article .uv-paper-aside aside a:visited {
 			color: #666666!important;
+			text-align: left !important;
 		}
 		.uv-paper-article .uv-paper-aside aside a:hover,.uv-paper-article .uv-paper-aside aside a:active {
 			text-decoration: none!important;
 			color: white!important;
+			text-align: left !important;
 		}
 		@media (max-width: 700px) {
 			.uv-paper-article {
@@ -59,9 +62,9 @@
 						{% for catArticle in catArticles %}
 							<li>
 								{% if catArticle.id == article.id %}
-									<p class="btn uv-btn active"> {{ catArticle.name }}</p>
+									<p class="btn uv-btn active">{{catArticle.name}}</p>
 								{% else %}
-									<a class="btn uv-btn listBtn" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': catArticle.slug})}}"> {{ catArticle.name }}</a>
+									<a class="btn uv-btn listBtn" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': catArticle.slug})}}">{{catArticle.name}}</a>
 								{% endif %}
 							</li>
 						{% endfor %}
