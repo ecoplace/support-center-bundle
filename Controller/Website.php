@@ -313,7 +313,7 @@ class Website extends Controller
         $article_category = $articleRepository->getArticleCategory($request,$article->getId()) ? $articleRepository->getArticleCategory($request,$article->getId())[0] : null;
 
         $parameterBag = [
-            'categoryId' => $article_category ? $article_category->getId() : null,
+            'categoryId' => $article_category ? $article_category->getCategoryId() : null,
             'status' => 1,
             'sort' => 'id',
             'direction' => 'desc'
