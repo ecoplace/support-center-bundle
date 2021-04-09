@@ -12,7 +12,8 @@
 {% block metaKeywords %}{{ article.keywords ? : uvdesk_service.createConentToKeywords(article.content) }}{% endblock %}
 
 {% block siteSchema %}{{ user_service.getWebsiteSchema(article)|raw }}{% endblock %}
-{% block templateCSS %}
+
+{% block body %}
 	<style>
 		.active{
 			background-color: #ff5a5f;
@@ -23,15 +24,30 @@
 			font-weight: 700;
 			box-shadow: 0 10px 10px -10px rgba(0 0 0 / 40%);
 		}
+		.uv-paper-article{
+			display: grid;
+			grid-template-columns: 0fr auto;
+			grid-gap: 1rem;
+		}
+		@media (min-width: 768px) {
+			.uv-paper-article {
+				display: grid;
+				grid-template-columns: auto;
+				grid-gap: 1rem;
+			}
+			.uv-paper-aside{
+				order: 2;
+			}
+			.asideClass{
+				padding: 0;
+			}
+		}
 	</style>
-{% endblock %}
-
-{% block body %}
-	<div class="uv-paper-article" style="display: grid;grid-template-columns: 0fr auto;grid-gap: 1rem;">
+	<div class="uv-paper-article" style="">
 		<div class="uv-paper-aside" style="width: 100%;min-width: 280px;">
 			{% if catArticles %}
 				<h1 style="font-size: 18px;margin-bottom: 0em;color: #555;">Articles from this folder</h1>
-				<aside style="background: none;">
+				<aside class="asideClass" style="background: none;">
 					<ul style="list-style: none;padding-left: 0px;margin: 0;background-color: none;">
 						{% for catArticle in catArticles %}
 							<li><a href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': catArticle.slug})}}" class="{% if catArticle.id == article.id %} active {% endif %}"> {{ catArticle.name }}</a></li>
