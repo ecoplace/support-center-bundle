@@ -436,24 +436,24 @@ class Article extends EntityRepository
         return $results;
     }
 
-    public function getArticleCategory(Request $request)
+    public function getArticleCategory(Request $request,$id =null)
     {
         $queryBuilder = $this->createQueryBuilder('a');
 
         $prams = array(
-                        'articleId' => (int)$request->attributes->get('article'),
-                    );
+            'articleId' => $id ? $id : (int)$request->attributes->get('article'),
+        );
 
         $results = $queryBuilder->select('ac')
-                 ->leftJoin('Webkul\SupportCenterBundle\Entity\ArticleCategory','ac','WITH', 'ac.articleId = a.id')
-                 ->andwhere('ac.articleId = :articleId')
-                 ->orderBy(
-                        $request->query->get('sort') ? 'a.'.$request->query->get('sort') : 'a.id',
-                        $request->query->get('direction') ? $request->query->get('direction') : Criteria::DESC
-                    )
-                 ->setParameters($prams)
-                 ->getQuery()
-                 ->getResult()
+            ->leftJoin('Webkul\UVDesk\SupportCenterBundle\Entity\ArticleCategory','ac','WITH', 'ac.articleId = a.id')
+            ->andwhere('ac.articleId = :articleId')
+            ->orderBy(
+                $request->query->get('sort') ? 'a.'.$request->query->get('sort') : 'a.id',
+                $request->query->get('direction') ? $request->query->get('direction') : Criteria::DESC
+            )
+            ->setParameters($prams)
+            ->getQuery()
+            ->getResult()
         ;
 
         return $results;

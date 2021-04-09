@@ -157,6 +157,8 @@ class Website extends Controller
             ];
         }
 
+        $articleRepository = $this->getDoctrine()->getRepository('UVDeskSupportCenterBundle:Article');
+
         return $this->render('@UVDeskSupportCenter//Knowledgebase//folder.html.twig', [
             'folder' => $solution,
             'categoryCount' => $this->getDoctrine()
@@ -165,7 +167,8 @@ class Website extends Controller
             'categories' => $this->getDoctrine()
                 ->getRepository('UVDeskSupportCenterBundle:Solutions')
                 ->getCategoriesWithCountBySolution($solution->getId()),
-            'breadcrumbs' => $breadcrumbs
+            'breadcrumbs' => $breadcrumbs,
+            'popArticles'  => $articleRepository->getPopularTranslatedArticles($request->getLocale()),
         ]);
     }
 
@@ -306,7 +309,16 @@ class Website extends Controller
             }
         }
 
-        // @TODO: App popular articles
+
+        $article_category = $articleRepository->getArticleCategory($request,$article->getId()) ? $articleRepository->getArticleCategory($request,$article->getId())[0] : null;
+
+        $parameterBag = [
+            'categoryId' => $article_category ? $article_category->getId() : null,
+            'status' => 1,
+            'sort' => 'id',
+            'direction' => 'desc'
+        ];
+
         $article_details = [
             'article' => $article,
             'breadcrumbs' => [
@@ -317,7 +329,9 @@ class Website extends Controller
             'articleTags' => $articleRepository->getTagsByArticle($article->getId()),
             'articleAuthor' => $articleRepository->getArticleAuthorDetails($article->getId()),
             'relatedArticles' => $articleRepository->getAllRelatedyByArticle(['locale' => $request->getLocale(), 'articleId' => $article->getId()], [1]),
-            'popArticles'  => $articleRepository->getPopularTranslatedArticles($request->getLocale()),
+            'catArticles'  => $article_category ? $this->getDoctrine()
+                ->getRepository('UVDeskSupportCenterBundle:Article')
+                ->getAllArticles(new ParameterBag($parameterBag), $this->container, 'a.id, a.name, a.slug, a.stared') : null,
             'feedbacks' => $feedbacks
         ];
 
