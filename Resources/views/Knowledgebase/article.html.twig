@@ -33,6 +33,7 @@
 		.uv-paper-article .uv-paper-aside aside a:link, .uv-paper-article .uv-paper-aside aside a:visited {
 			color: #666666!important;
 			text-align: left !important;
+			font-weight: unset !important;
 		}
 		.uv-paper-article .uv-paper-aside aside a:hover,.uv-paper-article .uv-paper-aside aside a:active {
 			text-decoration: none!important;
@@ -54,13 +55,13 @@
 		}
 	</style>
 	<div class="uv-paper-article" style="">
-		<div class="uv-paper-aside" style="width: 100%;min-width: 280px;">
+		<div class="uv-paper-aside" style="width: 100%;min-width: 280px;margin: 0">
 			{% if catArticles %}
 				<h1 style="font-size: 18px;margin-bottom: 0em;color: #555;">Articles from this folder</h1>
 				<aside class="asideClass" style="background: none;">
 					<ul style="list-style: none;padding-left: 0px;margin: 0;background-color: none;">
 						{% for catArticle in catArticles %}
-							<li>
+							<li style="margin: 0;">
 								{% if catArticle.id == article.id %}
 									<p class="btn uv-btn active">{{catArticle.name}}</p>
 								{% else %}
