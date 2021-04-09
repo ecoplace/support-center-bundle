@@ -15,19 +15,16 @@
 
 {% block body %}
 	<style>
-		.active{
-			background-color: #ff5a5f;
-			display: block;
-			padding: .5rem;
-			border-radius: 4px;
-			color: white !important;
-			font-weight: 700;
-			box-shadow: 0 10px 10px -10px rgba(0 0 0 / 40%);
-		}
 		.uv-paper-article{
 			display: grid;
 			grid-template-columns: 0fr auto;
 			grid-gap: 1rem;
+		}
+		.listBtn{
+			background-color: #fff;
+		}
+		.uv-paper-article .uv-paper-aside aside a:hover {
+			text-decoration: none!important;
 		}
 		@media (max-width: 700px) {
 			.uv-paper-article {
@@ -50,7 +47,13 @@
 				<aside class="asideClass" style="background: none;">
 					<ul style="list-style: none;padding-left: 0px;margin: 0;background-color: none;">
 						{% for catArticle in catArticles %}
-							<li><a href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': catArticle.slug})}}" class="{% if catArticle.id == article.id %} active {% endif %}"> {{ catArticle.name }}</a></li>
+							<li>
+								{% if catArticle.id == article.id %}
+									<p class="btn uv-btn active"> {{ catArticle.name }}</p>
+								{% else %}
+									<a class="btn uv-btn listBtn" href="{{path('helpdesk_knowledgebase_read_slug_article', {'slug': catArticle.slug})}}"> {{ catArticle.name }}</a>
+								{% endif %}
+							</li>
 						{% endfor %}
 					</ul>
 				</aside>
@@ -138,7 +141,7 @@
 					},
 					initialize: function() {
 						{% if feedbacks is defined and feedbacks.article is not empty %}
-							this.feedbacks = {{ feedbacks.article|json_encode|raw }};
+						this.feedbacks = {{ feedbacks.article|json_encode|raw }};
 						{% endif %}
 
 						this.render();
